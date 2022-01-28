@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Day's Schedule
+{% endblock %}
+
+{% block main %}
+
+<main class="container p-5">
+    <!-- Header that displays weekday, month, and day of month-->
+    <h2  class="w3-bottombar w3-border-blue" style="text-align:center">Schedule for {{ day_name_upper }}, {{ month }} {{ day_of_month}}</h2><br>
+    <!-- If someone is taking time off on this day, display their information-->
+    {% if time_off %}
+    <div class="alert alert-primary" role="alert">
+      {{ off[0][0] }} {{ off[0][1] }} is not working today.
+    </div>
+    {% endif %}
+    <!-- If someone is covering for another doctor, display their information-->
+    {% if coverage_found %}
+    <div class="alert alert-primary" role="alert">
+      {{ covering[0][0] }} {{ covering[0][1] }} is covering for them.
+    </div>
+    {% endif %}
+    <!-- Show list of doctors who are scheduled to work on this day. Allow user to edit their schedule-->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Specialty</th>
+                <th>Location</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in doctors %}
+                <tr>
+                    <td> Dr. {{  row[0] }} {{  row[1]  }}</td>
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[3] }}</td>
+                    <td><button type="{{  row[4]  }}" class="btn btn-link" data-toggle="modal" data-target="#modalEditForm{{  row[4]  }}">Edit</button></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% for row in doctors %}
+<!-- Modal Time Off Form that opens when user clicks "Edit"-->
+<div class="modal fade" id="modalEditForm{{  row[4]  }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+    	<div class="modal-content">
+    	<div class="modal-header text-center w3-bottombar w3-border-blue"">
+        	<h2 class="modal-title w-100">Enter Time Off</h2>
+        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          		<span aria-hidden="true">&times;</span>
+        	</button>
+    	</div>
+    	<form action="/days_schedule" method="post" action="">
+	    	<div class="modal-body mx-3">
+                <div class="form-row justify-content-md-center" id="name">
+				<!---First Name--->
+                  <div>
+                    <label for="validationCustom01">First Name</label>
+                    <input type="text" class="form-control" id="validationCustom01" placeholder="First name"
+                           value="{{  row[0]  }}" name = "first_name" required>
+                  </div>
+                  <!---Last Name--->
+                  <div>
+                    <label for="validationCustom02">Last Name</label>
+                    <input type="text" class="form-control" id="validationCustom02" placeholder="Last name"
+                           value="{{  row[1]  }}" name = "last_name" required>
+                  </div>
+                </div>
+            </div><br>
+
+            <!---Specialty--->
+            <div class="form-row justify-content-md-center">
+              <div>
+                <label for="validationCustom03">Reason</label>
+                <select class="custom-select" required>
+                  <option selected="">Select a Reason</option>
+                  <option id="validationCustom03">Personal Time Off</option>
+                  <option id="validationCustom03">Sick</option>
+                  <option id="validationCustom03">Other</option>
+                </select>
+              </div>
+            </div><br><br>
+
+            <!---Schedule (Inpatient vs Outpatient)--->
+            <div class="form-group" style='margin: 1%'>
+                <!---Submit button and hidden fields to grab information from this form--->
+                <div class="form-row justify-content-md-center">
+                    <div class="modal-footer">
+                        <input value="{{  row[4]  }}" name = "id" type="hidden">
+                        <input value="{{  row[2]  }}" name = "specialty" type="hidden">
+                        <input value="{{  row[3]  }}" name = "location" type="hidden">
+                        <input value="{{ day_name_upper }}" name = "day of week" type="hidden">
+                        <input value="{{ day_of_month}}" name = "day of month" type="hidden">
+                        <input autocomplete="off" class="btn btn-primary" name="action" value="Submit Changes" type="submit">
+                    </div>
+                </div>
+            </div>
+		    </form>
+		</div>
+	</div>
+</div>
+
+<!-- Modal Registration Form script-->
+<script> $('#myModal').modal(options)</script>
+{% endfor %}
+
+{% endblock %}

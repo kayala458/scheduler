@@ -1,0 +1,344 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!--layout template sourced from https://www.w3schools.com/w3css/w3css_templates.asp-->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-win8.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" >
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Cabin" />
+    <link href="/static/styles.css" rel="stylesheet">
+
+    <title>Scheduler</title>
+  </head>
+  <body>
+
+  <!--- Display calendar, show which doctors are scheduled for each day--->
+  <div class="row justify-content-center">
+    <!---Header to display month and year--->
+    <div>
+      <h2>{{  month  }} {{  year  }}</h2>
+    </div>
+  </div>
+  <!---Header to display days of the week--->
+  <div class="row justify-content-center">
+    <table class="table table-bordered col-md-11">
+      <thead class="thead-light">
+        <tr>
+            <th>Sunday</th>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+            <th>Saturday</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for week in lst_of_weeks %}
+          <tr style="height: 200px">
+            <td><a href="/"> {{  week[0] }} </a></td>
+
+            <!---Display who is scheduled to work on Mondays--->
+            <td>
+              <!---Day of the month--->
+              <a href="{{  url_for('days_schedule', type= week[1]) }}"> {{  week[1] }} </a>
+              <!---Only display schedule if day is part of the current month--->
+              {% if week[1] != '' %}
+              <!---Display regular schedule if no changes were made on this day--->
+              {% if week[1] not in ETO_dict %}
+                <div style="margin-top: 10px">
+                  {% for doc in monday %}
+                  <!---Color code based on location (inpatient vs. outpatient etc.)--->
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center;
+                          {% if doc[3]  == "Inpatient" %} background-color: rgba(0, 63, 125, 0.9); color: white" {% endif %}
+                          {% if doc[3]  == "Consult" %} background-color: rgb(214, 255, 255)" {% endif %}
+                            {% if doc[3]  == "Outpatient" %} background-color: rgba(49, 178, 224, .7); color: white" {% endif %}>
+                      <small data-toggle="tooltip" data-placement="top" title="{{  doc[3]  }}">Dr. {{ doc[1] }} - {{  doc[2]  }}</small>
+                    </div>
+                  {% endfor %}
+                </div>
+
+              {% else %}
+
+                <div style="margin-top: 10px">
+                  {% for doc in monday %}
+                    <!---If a doctor has taken time off, display them in red)--->
+                    {% if doc[4] == ETO_dict[week[1]] %}
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center; background-color: rgba(212,44,128, 0.5)">
+                      <small data-toggle="tooltip" data-placement="top" title="{{  doc[3]  }}">Dr. {{ doc[1] }} - {{  doc[2]  }}</small>
+                    </div>
+                    {% else %}
+                    <!---Color code based on location (inpatient vs. outpatient etc.)--->
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center;
+                          {% if doc[3]  == "Inpatient" %} background-color: rgba(0, 63, 125, 0.9); color: white" {% endif %}
+                          {% if doc[3]  == "Consult" %} background-color: rgb(214, 255, 255)" {% endif %}
+                            {% if doc[3]  == "Outpatient" %} background-color: rgba(49, 178, 224, .7); color: white" {% endif %}>
+                      <small data-toggle="tooltip" data-placement="top" title="{{  doc[3]  }}">Dr. {{ doc[1] }} - {{  doc[2]  }}</small>
+                    </div>
+                    {% endif %}
+                  {% endfor %}
+                    <!---Add doctor to display in green if they are covering for another doctor on this day)--->
+                  {% if week[1] in covering_dict %}
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center; background-color: rgba(150,212,44, 0.7)">
+                      <small>Dr. {{ covering_dict[week[1]] }} is covering. </small>
+                    </div>
+                  {% endif %}
+                  </div>
+                  </div>
+                {% endif %}
+              {% endif %}
+            </td>
+
+            <!---Display who is scheduled to work on Tuesdays--->
+            <td>
+              <a href="{{  url_for('days_schedule', type= week[2]) }}"> {{  week[2] }} </a>
+              <!---Only display schedule if day is part of the current month--->
+              {% if week[2] != '' %}
+              <!---Display regular schedule if no changes were made on this day--->
+              {% if week[2] not in ETO_dict %}
+                <div style="margin-top: 10px">
+                  {% for doc in tuesday %}
+                  <!---Color code based on location (inpatient vs. outpatient etc.)--->
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center;
+                          {% if doc[3]  == "Inpatient" %} background-color: rgba(0, 63, 125, 0.9); color: white" {% endif %}
+                          {% if doc[3]  == "Consult" %} background-color: rgb(214, 255, 255)" {% endif %}
+                            {% if doc[3]  == "Outpatient" %} background-color: rgba(49, 178, 224, .7); color: white" {% endif %}>
+                      <small data-toggle="tooltip" data-placement="top" title="{{  doc[3]  }}">Dr. {{ doc[1] }} - {{  doc[2]  }}</small>
+                    </div>
+                  {% endfor %}
+                </div>
+
+              {% else %}
+
+                <div style="margin-top: 10px">
+                  {% for doc in tuesday %}
+                    <!---If a doctor has taken time off, display them in red)--->
+                    {% if doc[4] == ETO_dict[week[2]] %}
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center; background-color: rgba(212,44,128, 0.5)">
+                      <small data-toggle="tooltip" data-placement="top" title="{{  doc[3]  }}">Dr. {{ doc[1] }} - {{  doc[2]  }}</small>
+                    </div>
+                    {% else %}
+                    <!---Otherwise, Color code based on location (inpatient vs. outpatient etc.)--->
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center;
+                          {% if doc[3]  == "Inpatient" %} background-color: rgba(0, 63, 125, 0.9); color: white" {% endif %}
+                          {% if doc[3]  == "Consult" %} background-color: rgb(214, 255, 255)" {% endif %}
+                            {% if doc[3]  == "Outpatient" %} background-color: rgba(49, 178, 224, .7); color: white" {% endif %}>
+                      <small data-toggle="tooltip" data-placement="top" title="{{  doc[3]  }}">Dr. {{ doc[1] }} - {{  doc[2]  }}</small>
+                    </div>
+                    {% endif %}
+                  {% endfor %}
+                    <!---Add doctor to display in green if they are covering for another doctor on this day)--->
+                 {% if week[2] in covering_dict %}
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center; background-color: rgba(150,212,44, 0.7)">
+                      <small>Dr. {{ covering_dict[week[2]] }} is covering. </small>
+                    </div>
+                  {% endif %}
+
+                  </div>
+                  </div>
+                {% endif %}
+              {% endif %}
+            </td>
+
+            <!---Display who is scheduled to work on Wednesdays--->
+            <td>
+              <a href="{{  url_for('days_schedule', type= week[3]) }}"> {{  week[3] }} </a>
+              <!---Only display schedule if day is part of the current month--->
+              {% if week[3] != '' %}
+              <!---Display regular schedule if no changes were made on this day--->
+              {% if week[3] not in ETO_dict %}
+                <div style="margin-top: 10px">
+                  {% for doc in wednesday %}
+                  <!---Color code based on location (inpatient vs. outpatient etc.)--->
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center;
+                          {% if doc[3]  == "Inpatient" %} background-color: rgba(0, 63, 125, 0.9); color: white" {% endif %}
+                          {% if doc[3]  == "Consult" %} background-color: rgb(214, 255, 255)" {% endif %}
+                            {% if doc[3]  == "Outpatient" %} background-color: rgba(49, 178, 224, .7); color: white" {% endif %}>
+                      <small data-toggle="tooltip" data-placement="top" title="{{  doc[3]  }}"> Dr. {{ doc[1] }} - {{  doc[2]  }}</small>
+                    </div>
+                  {% endfor %}
+                </div>
+
+              {% else %}
+
+                <div style="margin-top: 10px">
+                  {% for doc in wednesday %}
+                    <!---If a doctor has taken time off, display them in red)--->
+                    {% if doc[4] == ETO_dict[week[3]] %}
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center; background-color: rgba(212,44,128, 0.5)">
+                      <small data-toggle="tooltip" data-placement="top" title="{{  doc[3]  }}">Dr. {{ doc[1] }} - {{  doc[2]  }}</small>
+                    </div>
+                    {% else %}
+                  <!---Otherwise, Color code based on location (inpatient vs. outpatient etc.)--->
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center;
+                          {% if doc[3]  == "Inpatient" %} background-color: rgba(0, 63, 125, 0.9); color: white" {% endif %}
+                          {% if doc[3]  == "Consult" %} background-color: rgb(214, 255, 255)" {% endif %}
+                            {% if doc[3]  == "Outpatient" %} background-color: rgba(49, 178, 224, .7); color: white" {% endif %}>
+                      <small data-toggle="tooltip" data-placement="top" title="{{  doc[3]  }}">Dr. {{ doc[1] }} - {{  doc[2]  }}</small>
+                    </div>
+                    {% endif %}
+                  {% endfor %}
+                    <!---Add doctor to display in green if they are covering for another doctor on this day)--->
+                  {% if week[3] in covering_dict %}
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center; background-color: rgba(150,212,44, 0.7)">
+                      <small>Dr. {{ covering_dict[week[3]] }} is covering. </small>
+                    </div>
+                  {% endif %}
+                  </div>
+                  </div>
+                {% endif %}
+              {% endif %}
+            </td>
+
+            <!---Display who is scheduled to work on Thursdays--->
+            <td>
+              <a href="{{  url_for('days_schedule', type= week[4]) }}"> {{  week[4] }} </a>
+              <!---Only display schedule if day is part of the current month--->
+              {% if week[4] != '' %}
+              <!---Display regular schedule if no changes were made on this day--->
+                {% if week[4] not in ETO_dict %}
+                <div style="margin-top: 10px">
+                  {% for doc in thursday %}
+                  <!---Color code based on location (inpatient vs. outpatient etc.)--->
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center;
+                          {% if doc[3]  == "Inpatient" %} background-color: rgba(0, 63, 125, 0.9); color: white" {% endif %}
+                          {% if doc[3]  == "Consult" %} background-color: rgb(214, 255, 255)" {% endif %}
+                            {% if doc[3]  == "Outpatient" %} background-color: rgba(49, 178, 224, .7); color: white" {% endif %}>
+                      <small data-toggle="tooltip" data-placement="top" title="{{  doc[3]  }}">Dr. {{ doc[1] }} - {{  doc[2]  }}</small>
+                    </div>
+                  {% endfor %}
+                </div>
+
+                {% else %}
+
+                <div style="margin-top: 10px">
+                  {% for doc in thursday %}
+                    <!---If a doctor has taken time off, display them in red)--->
+                    {% if doc[4] == ETO_dict[week[4]] %}
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center; background-color: rgba(212,44,128, 0.5)">
+                      <small data-toggle="tooltip" data-placement="top" title="{{  doc[3]  }}">Dr. {{ doc[1] }} - {{  doc[2]  }}</small>
+                    </div>
+                    {% else %}
+                  <!---Otherwise, Color code based on location (inpatient vs. outpatient etc.)--->
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center;
+                          {% if doc[3]  == "Inpatient" %} background-color: rgba(0, 63, 125, 0.9); color: white" {% endif %}
+                          {% if doc[3]  == "Consult" %} background-color: rgb(214, 255, 255)" {% endif %}
+                            {% if doc[3]  == "Outpatient" %} background-color: rgba(49, 178, 224, .7); color: white" {% endif %}>
+                      <small data-toggle="tooltip" data-placement="top" title="{{  doc[3]  }}">Dr. {{ doc[1] }} - {{  doc[2]  }}</small>
+                    </div>
+                    {% endif %}
+                  {% endfor %}
+                  <!---Add doctor to display in green if they are covering for another doctor on this day)--->
+                  {% if week[4] in covering_dict %}
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center; background-color: rgba(150,212,44, 0.7)">
+                      <small>Dr. {{ covering_dict[week[4]] }} is covering. </small>
+                    </div>
+                  {% endif %}
+
+                  </div>
+                  </div>
+                {% endif %}
+              {% endif %}
+            </td>
+
+            <!---Display who is scheduled to work on Fridays--->
+            <td>
+              <a href="{{  url_for('days_schedule', type= week[5]) }}"> {{  week[5] }} </a>
+              <!---Only display schedule if day is part of the current month--->
+              {% if week[5] != '' %}
+
+              <!---Display regular schedule if no changes were made on this day--->
+              {% if week[5] not in ETO_dict %}
+                <div style="margin-top: 10px">
+                  {% for doc in friday %}
+                  <!---Color code based on location (inpatient vs. outpatient etc.)--->
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center;
+                          {% if doc[3]  == "Inpatient" %} background-color: rgba(0, 63, 125, 0.9); color: white" {% endif %}
+                          {% if doc[3]  == "Consult" %} background-color: rgb(214, 255, 255)" {% endif %}
+                            {% if doc[3]  == "Outpatient" %} background-color: rgba(49, 178, 224, .7); color: white" {% endif %}>
+                      <small data-toggle="tooltip" data-placement="top" title="{{  doc[3]  }}">Dr. {{ doc[1] }} - {{  doc[2]  }}</small>
+                    </div>
+                  {% endfor %}
+                </div>
+
+              {% else %}
+
+                <div style="margin-top: 10px">
+                  {% for doc in friday %}
+                    <!---If a doctor has taken time off, display them in red)--->
+                    {% if doc[4] == ETO_dict[week[5]] %}
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center; background-color: rgba(212,44,128, 0.5)">
+                      <small data-toggle="tooltip" data-placement="top" title="{{  doc[3]  }}">Dr. {{ doc[1] }} - {{  doc[2]  }}</small>
+                    </div>
+                    {% else %}
+                  <!---Otherwise, Color code based on location (inpatient vs. outpatient etc.)--->
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center;
+                          {% if doc[3]  == "Inpatient" %} background-color: rgba(0, 63, 125, 0.9); color: white" {% endif %}
+                          {% if doc[3]  == "Consult" %} background-color: rgb(214, 255, 255)" {% endif %}
+                            {% if doc[3]  == "Outpatient" %} background-color: rgba(49, 178, 224, .7); color: white" {% endif %}>
+                      <small data-toggle="tooltip" data-placement="top" title="{{  doc[3]  }}">Dr. {{ doc[1] }} - {{  doc[2]  }}</small>
+                    </div>
+                    {% endif %}
+                  {% endfor %}
+                  <!---Add doctor to display in green if they are covering for another doctor on this day)--->
+                  {% if week[5] in covering_dict %}
+                    <div class = "rounded w3-border w3-border-white" style = "text-align: center; background-color: rgba(150,212,44, 0.7)">
+                      <small>Dr. {{ covering_dict[week[5]] }} is covering. </small>
+                    </div>
+                  {% endif %}
+
+                  </div>
+                  </div>
+                {% endif %}
+              {% endif %}
+            </td>
+            <td><a href="/"> {{  week[6] }} </a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div><br><br>
+
+  <!---Link to form to add a new doctor's information--->
+  <div class="col-6 offset-3">
+    <a href="{{  url_for('rules')  }}">
+      <div class="w3-container w3-blue w3-text-white" style="text-align:center">
+        <h4>Add New Doctor</h4>
+      </div>
+    </a>
+  </div>
+  <!---Link to page that displays each doctor's information--->
+  <div class="col-6 offset-3">
+    <a href="{{  url_for('doctors')  }}">
+      <div class="w3-container w3-highway-blue w3-text-white" style="text-align:center">
+        <h4>View all Existing Doctors</h4>
+      </div>
+    </a>
+  </div><br><hr>
+  </body>
+</html>
+{% endblock %}
+
+
+
+
+
+
+
+

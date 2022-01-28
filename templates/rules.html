@@ -1,0 +1,152 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Schedule Rules
+{% endblock %}
+
+{% block main %}
+
+<!---Enter doctor's schedule information--->
+<main class="container p-5">
+<!---Header--->
+<div class="w3-panel">
+  <h2 class="w3-bottombar w3-border-blue" style="text-align:center"> Enter the information for a new doctor here</h2>
+</main>
+<!---Form--->
+  <form action= "/rules" method="post" action="" class="needs-validation" novalidate>
+    <div class="form-row justify-content-md-center" id="name">
+      <!---First Name--->
+      <div class="col-md-3 mb-3">
+        <label for="validationCustom01">First Name</label>
+        <input type="text" class="form-control" id="validationCustom01" placeholder="First name" value="" name = "first_name" required>
+      </div>
+      <!---Last Name--->
+      <div class="col-md-3 mb-3">
+        <label for="validationCustom02">Last Name</label>
+        <input type="text" class="form-control" id="validationCustom02" placeholder="Last name" value="" name = "last_name" required>
+      </div>
+    </div>
+    <!---Specialty--->
+    <div class="form-row justify-content-md-center">
+      <div class = "col-md-6 mb-3">
+        <label for="validationCustom03">Specialty</label>
+        <select class="custom-select" required name="specialty">
+          <option disabled="" selected="" value="">Select a Specialty</option>
+          <option value="General Rehab Medicine" id="validationCustom03">General Rehab Medicine</option>
+          <option value="Stroke" id="validationCustom03">Stroke</option>
+          <option value="Brain Injury" id="validationCustom03">Brain Injury</option>
+        </select>
+      </div>
+    </div>
+    <!---Schedule (Inpatient vs Outpatient)--->
+    <div class="form-group col-12 offset-3">
+      <label>Regular Weekly Schedule</label>
+      <ul class="list-group list-group-flush col-md-6">
+        <!---Monday--->
+          <li class="list-group-item">Monday
+          <div class="custom-control custom-radio custom-control-inline" style='margin-left:10%'>
+            <input type="radio" id="Radioline1" name="monday" class="custom-control-input" value="Inpatient">
+            <label class="custom-control-label text-secondary" for="Radioline1">Inpatient</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline" style='margin: 1% 5%'>
+            <input type="radio" id="Radioline2" name="monday" class="custom-control-input" value="Outpatient">
+            <label class="custom-control-label text-secondary" for="Radioline2">Outpatient</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="Radioline3" name="monday" class="custom-control-input" value="Consult">
+            <label class="custom-control-label text-secondary" for="Radioline3">Satellite/Consult</label>
+          </div>
+          </li>
+          <!---Tuesday--->
+          <li class="list-group-item">Tuesday
+            <div class="custom-control custom-radio custom-control-inline" style='margin-left:10%'>
+              <input type="radio" id="Radioline4" name="tuesday" class="custom-control-input" value="Inpatient">
+              <label class="custom-control-label text-secondary" for="Radioline4">Inpatient</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline" style='margin: 1% 5%'>
+              <input type="radio" id="Radioline5" name="tuesday" class="custom-control-input" value="Outpatient">
+              <label class="custom-control-label text-secondary" for="Radioline5">Outpatient</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" id="Radioline6" name="tuesday" class="custom-control-input" value="Consult">
+              <label class="custom-control-label text-secondary" for="Radioline6">Satellite/Consult</label>
+            </div>
+          </li>
+          <!---Wednesday--->
+          <li class="list-group-item">Wednesday
+            <div class="custom-control custom-radio custom-control-inline" style='margin-left:6.5%'>
+              <input type="radio" id="Radioline7" name="wednesday" class="custom-control-input" value="Inpatient">
+              <label class="custom-control-label text-secondary" for="Radioline7">Inpatient</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline" style='margin: 1% 5%'>
+              <input type="radio" id="Radioline8" name="wednesday" class="custom-control-input" value="Outpatient">
+              <label class="custom-control-label text-secondary" for="Radioline8">Outpatient</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" id="Radioline9" name="wednesday" class="custom-control-input" value="Consult">
+              <label class="custom-control-label text-secondary" for="Radioline9">Satellite/Consult</label>
+            </div>
+          </li>
+          <!---Thursday--->
+          <li class="list-group-item">Thursday
+            <div class="custom-control custom-radio custom-control-inline" style='margin-left:9%'>
+              <input type="radio" id="Radioline10" name="thursday" class="custom-control-input" value="Inpatient">
+              <label class="custom-control-label text-secondary" for="Radioline10">Inpatient</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline" style='margin: 1% 5%'>
+              <input type="radio" id="Radioline11" name="thursday" class="custom-control-input" value="Outpatient">
+              <label class="custom-control-label text-secondary" for="Radioline11">Outpatient</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" id="Radioline12" name="thursday" class="custom-control-input" value="Consult">
+              <label class="custom-control-label text-secondary" for="Radioline12">Satellite/Consult</label>
+            </div>
+          </li>
+          <!---Friday--->
+          <li class="list-group-item">Friday
+            <div class="custom-control custom-radio custom-control-inline" style='margin-left:12%'>
+              <input type="radio" id="Radioline13" name="friday" class="custom-control-input" value="Inpatient">
+              <label class="custom-control-label text-secondary" for="Radioline13">Inpatient</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline" style='margin: 1% 5%'>
+              <input type="radio" id="Radioline14" name="friday" class="custom-control-input" value="Outpatient">
+              <label class="custom-control-label text-secondary" for="Radioline14">Outpatient</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+              <input type="radio" id="Radioline15" name="friday" class="custom-control-input" value="Consult">
+              <label class="custom-control-label text-secondary" for="Radioline15">Satellite/Consult</label>
+            </div>
+          </li>
+        </ul>
+        </div>
+      </div>
+    <!---Submit buttons--->
+    <div class="form-row justify-content-md-center">
+      <input type="submit" class="btn btn-primary col-md-3 mb-3" name="action" value="Submit" style='margin-right:16px'>
+      <a href="/" class="col-md-3 mb-3"><input type="button" class="btn btn-primary btn-block" value="Cancel" style='margin-right:16px'></a>
+    </div>
+  </form>
+
+  <script>
+  // JavaScript for disabling form submissions if there are fields that have not been completed
+  (function() {
+    'use strict';
+    window.addEventListener('load', function() {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+  </script>
+
+</div>
+{% endblock %}

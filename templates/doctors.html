@@ -1,0 +1,197 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Doctors
+{% endblock %}
+
+{% block main %}
+<main class="container p-5">
+    <!-- Header-->
+    <h2  class="w3-bottombar w3-border-blue" style="text-align:center">Doctors Currently in System</h2><br>
+    <!-- Table column headers--->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Specialty</th>
+                <th>Mondays</th>
+                <th>Tuesdays</th>
+                <th>Wednesdays</th>
+                <th>Thursdays</th>
+                <th>Fridays</th>
+                <th></th>
+            </tr>
+        </thead>
+        <!-- Table rows to display each doctor currently in system--->
+        <tbody>
+            {% for row in doctors %}
+                <tr>
+                    <td> Dr. {{  row[0] }} {{  row[1]  }}</td>
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[3] }}</td>
+                    <td>{{ row[4] }}</td>
+                    <td>{{ row[5] }}</td>
+                    <td>{{ row[6] }}</td>
+                    <td>{{ row[7] }}</td>
+                    <td><button type="{{  row[8]  }}" class="btn btn-link" data-toggle="modal" data-target="#modalEditForm{{  row[8]  }}">Edit</button></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% for row in doctors %}
+<!-- Modal Edit Form: Opens once "Edit" is clicked-->
+<div class="modal fade" id="modalEditForm{{  row[8]  }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+    	<div class="modal-content">
+    	<div class="modal-header text-center w3-bottombar w3-border-blue">
+        	<h2 class="modal-title w-100">Edit Doctor's Information</h2>
+        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          		<span aria-hidden="true">&times;</span>
+        	</button>
+    	</div>
+    	<form action="/doctors" method="post" action="">
+	    	<div class="modal-body mx-3">
+                <div class="form-row justify-content-md-center" id="name">
+				<!---First Name--->
+                  <div>
+                    <label for="validationCustom01">First Name</label>
+                    <input type="text" class="form-control" id="validationCustom01" placeholder="First name"
+                           value="{{  row[0]  }}" name = "first_name" required>
+                  </div>
+                  <!---Last Name--->
+                  <div>
+                    <label for="validationCustom02">Last Name</label>
+                    <input type="text" class="form-control" id="validationCustom02" placeholder="Last name"
+                           value="{{  row[1]  }}" name = "last_name" required>
+                  </div>
+                </div>
+            </div><br>
+
+            <!---Specialty--->
+            <div class="form-row justify-content-md-center">
+              <div>
+                <label for="validationCustom03">Specialty</label>
+                <select class="custom-select" required name="specialty">
+                  <option selected="" value="{{ row[2] }}">{{ row[2] }}</option>
+                  <option value="General Rehab Medicine" id="validationCustom03">General Rehab Medicine</option>
+                  <option value="Stroke" id="validationCustom03">Stroke</option>
+                  <option value="Brain Injury" id="validationCustom03">Brain Injury</option>
+                </select>
+              </div>
+            </div><br><br>
+
+            <!---Schedule (Inpatient vs Outpatient)--->
+            <div class="form-group" style='margin: 1%'>
+              <label style="margin-left: 4%">Regular Weekly Schedule</label>
+              <ul class="list-group list-group-flush">
+                    <!---Monday--->
+                  <li class="list-group-item">Monday
+                  <div class="custom-control custom-radio custom-control-inline" style='margin-left:5.5%'>
+                    <input type="radio" id="Radioline1 {{  row[8]  }}" name="monday" class="custom-control-input" value="Inpatient"
+                           {% if row[3] == "Inpatient" %}checked{% endif %}>
+                    <label class="custom-control-label text-secondary" for="Radioline1 {{  row[8]  }}">Inpatient</label>
+                  </div>
+                  <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="Radioline2 {{  row[8]  }}" name="monday" class="custom-control-input" value="Outpatient"
+                           {% if row[3] == "Outpatient" %}checked{% endif %}>
+                    <label class="custom-control-label text-secondary" for="Radioline2 {{  row[8]  }}">Outpatient</label>
+                  </div>
+                  <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="Radioline3 {{  row[8]  }}" name="monday" class="custom-control-input" value="Consult"
+                           {% if row[3] == "Consult" %}checked{% endif %}>
+                    <label class="custom-control-label text-secondary" for="Radioline3 {{  row[8]  }}">Satellite/Consult</label>
+                  </div>
+                  </li>
+                  <!---Tuesday--->
+                  <li class="list-group-item">Tuesday
+                    <div class="custom-control custom-radio custom-control-inline" style='margin-left:5%'>
+                      <input type="radio" id="Radioline4 {{  row[8]  }}" name="tuesday" class="custom-control-input" value="Inpatient"
+                             {% if row[4] == "Inpatient" %}checked{% endif %}>
+                      <label class="custom-control-label text-secondary" for="Radioline4 {{  row[8]  }}">Inpatient</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input type="radio" id="Radioline5 {{  row[8]  }}" name="tuesday" class="custom-control-input" value="Outpatient"
+                            {% if row[4] == "Outpatient" %}checked{% endif %}>
+                      <label class="custom-control-label text-secondary" for="Radioline5 {{  row[8]  }}">Outpatient</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input type="radio" id="Radioline6 {{  row[8]  }}" name="tuesday" class="custom-control-input" value="Consult"
+                            {% if row[4] == "Consult" %}checked{% endif %}>
+                      <label class="custom-control-label text-secondary" for="Radioline6 {{  row[8]  }}">Satellite/Consult</label>
+                    </div>
+                  </li>
+                  <!---Wednesday--->
+                  <li class="list-group-item">Wednesday
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input type="radio" id="Radioline7 {{  row[8]  }}" name="wednesday" class="custom-control-input" value="Inpatient"
+                             {% if row[5] == "Inpatient" %}checked{% endif %}>
+                      <label class="custom-control-label text-secondary" for="Radioline7 {{  row[8]  }}">Inpatient</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input type="radio" id="Radioline8 {{  row[8]  }}" name="wednesday" class="custom-control-input" value="Outpatient"
+                            {% if row[5] == "Outpatient" %}checked{% endif %}>
+                      <label class="custom-control-label text-secondary" for="Radioline8 {{  row[8]  }}">Outpatient</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input type="radio" id="Radioline9 {{  row[8]  }}" name="wednesday" class="custom-control-input" value="Consult"
+                            {% if row[5] == "Consult" %}checked{% endif %}>
+                      <label class="custom-control-label text-secondary" for="Radioline9 {{  row[8]  }}">Satellite/Consult</label>
+                    </div>
+                  </li>
+                  <!---Thursday--->
+                  <li class="list-group-item">Thursday
+                    <div class="custom-control custom-radio custom-control-inline" style='margin-left:3.5%'>
+                      <input type="radio" id="Radioline10 {{  row[8]  }}" name="thursday" class="custom-control-input" value="Inpatient"
+                             {% if row[6] == "Inpatient" %}checked{% endif %}>
+                      <label class="custom-control-label text-secondary" for="Radioline10 {{  row[8]  }}">Inpatient</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input type="radio" id="Radioline11 {{  row[8]  }}" name="thursday" class="custom-control-input" value="Outpatient"
+                            {% if row[6] == "Outpatient" %}checked{% endif %}>
+                      <label class="custom-control-label text-secondary" for="Radioline11 {{  row[8]  }}">Outpatient</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input type="radio" id="Radioline12 {{  row[8]  }}" name="thursday" class="custom-control-input" value="Consult"
+                            {% if row[6] == "Consult" %}checked{% endif %}>
+                      <label class="custom-control-label text-secondary" for="Radioline12 {{  row[8]  }}">Satellite/Consult</label>
+                    </div>
+                  </li>
+                  <!---Friday--->
+                  <li class="list-group-item">Friday
+                    <div class="custom-control custom-radio custom-control-inline" style='margin-left:8%'>
+                      <input type="radio" id="Radioline13 {{  row[8]  }}" name="friday" class="custom-control-input" value="Inpatient"
+                             {% if row[7] == "Inpatient" %}checked{% endif %}>
+                      <label class="custom-control-label text-secondary" for="Radioline13 {{  row[8]  }}">Inpatient</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input type="radio" id="Radioline14 {{  row[8]  }}" name="friday" class="custom-control-input" value="Outpatient"
+                            {% if row[7] == "Outpatient" %}checked{% endif %}>
+                      <label class="custom-control-label text-secondary" for="Radioline14 {{  row[8]  }}">Outpatient</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                      <input type="radio" id="Radioline15 {{  row[8]  }}" name="friday" class="custom-control-input" value="Consult"
+                            {% if row[7] == "Consult" %}checked{% endif %}>
+                      <label class="custom-control-label text-secondary" for="Radioline15 {{  row[8]  }}">Satellite/Consult</label>
+                    </div>
+                  </li>
+                </ul>
+               </div><br>
+                <!---Submit and Delete buttons--->
+                <div class="form-row justify-content-md-center">
+                    <div class="modal-footer">
+                        <input value="{{  row[8]  }}" name = "id" type="hidden">
+                        <input autocomplete="off" class="btn btn-primary" name="action" value="Submit Changes" type="submit">
+                        <input autocomplete="off" class="btn btn-warning" name="action" value="Delete Record" type="submit">
+                    </div>
+                </div>
+            </div>
+		    </form>
+		</div>
+	</div>
+</div>
+
+<!-- Modal Registration Form script-->
+<script> $('#myModal').modal(options)</script>
+{% endfor %}
+{% endblock %}
