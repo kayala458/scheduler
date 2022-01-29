@@ -536,3 +536,6 @@ def doctors():
                 db.execute("DELETE FROM daily_availability WHERE id=?", (id,))
 
                 return redirect("/doctors")
+            
+def getApp():
+    return app
