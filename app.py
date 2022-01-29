@@ -537,5 +537,3 @@ def doctors():
 
                 return redirect("/doctors")
             
-def getApp():
-    return app
