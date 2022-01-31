@@ -1,4 +1,5 @@
 URL: https://dr-scheduler.herokuapp.com/
+
 Explanation of application: https://www.youtube.com/watch?v=4oN-cYCKFp4&t=17s
 
 For this project, I wanted to create a web application that would help my sister with her job as a hospital office manager in New Jersey. She is in charge of distributing a monthly schedule to each of the doctors that work in her office. Her boss creates this schedule, but she is adverse to any sort of technology that doesn’t do all of the work for her, so schedules are updated and distributed on paper. Any time a change is made, a new version of the schedule has to be re-distributed to the entire office. As you can imagine, this leaves a lot of room for error. So my application seeks to automate this process and store it in one central location, so that changes are immediately available to all of the doctors.
