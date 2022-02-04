@@ -112,6 +112,7 @@ def home():
         for day in corrected_ETO:
 
             ETO_taken = db.execute('''SELECT id FROM daily_availability WHERE "%s" = "ETO"''' % (day)).fetchall()
+            database.commit()
 
             ETO_dict[day] = ETO_taken[0][0]
 
@@ -119,6 +120,7 @@ def home():
 
         for day in corrected_covering:
             coverage = db.execute('''SELECT id, last_name FROM daily_availability WHERE "%s" = "Covering"''' % (day)).fetchall()
+            database.commit()
 
             covering_dict[day] = coverage[0][1]
 
@@ -198,6 +200,7 @@ def days_schedule():
 
                     # Obtain the covering doctor's name and specialty
                     covering = db.execute('SELECT first_name, last_name, specialty FROM doctors WHERE id = ?''', (cover_id,)).fetchall()
+                    database.commit()
 
                     # Add covering doctor to list of doctors already scheduled for that day
                     doctors = doctors + covering
@@ -467,6 +470,7 @@ def doctors():
 
             # Obtain doctors' information from doctors table, display info on page
             doctors = db.execute("SELECT first_name, last_name, specialty, monday, tuesday, wednesday, thursday, friday, id FROM doctors").fetchall()
+            database.commit()
 
             return render_template('doctors.html', doctors=doctors)
 
@@ -514,6 +518,7 @@ def doctors():
                 db.execute("""UPDATE doctors SET first_name = ?, last_name = ?, specialty = ?, monday =?, tuesday = ?,
                             wednesday = ?, thursday = ?,friday =? WHERE id = ?""", (first_name, last_name, specialty,
                             monday, tuesday, wednesday, thursday, friday, id))
+                database.commit()
 
                 return redirect("/doctors")
 
@@ -531,9 +536,11 @@ def doctors():
 
                 # Delete record from doctors table
                 db.execute("DELETE FROM doctors WHERE id=?", (id,))
+                database.commit()
 
                 # Delete record from daily_availability table
                 db.execute("DELETE FROM daily_availability WHERE id=?", (id,))
+                database.commit()
 
                 return redirect("/doctors")
             
